@@ -57,8 +57,8 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error('User not found!')
   }
 
-  const comparePassword = bcrypt.compare(password, user.password)
-
+  const comparePassword = await bcrypt.compare(password, user.password)
+  
   if(comparePassword) {
     const token = createToken(user._id)
 

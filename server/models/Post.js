@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const memoryModel = new mongoose.Schema({
+const postModel = new mongoose.Schema({
   title: {
     type: String,
     required: [true, 'Please add title value!']
@@ -16,6 +16,7 @@ const memoryModel = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Comment'
   }],
+  tags: [String],
   meta: {
     votes: [{ type: Number, user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } }]
   },
@@ -36,6 +37,6 @@ const memoryModel = new mongoose.Schema({
   { timestamps: true }  
 )
 
-const Memory = mongoose.model('Memory', memoryModel)
+const Post = mongoose.model('Post', postModel)
 
-module.exports = Memory
+module.exports = Post
