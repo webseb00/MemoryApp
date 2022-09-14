@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addPost } from '../features/posts/postsSlice'
+import { FaSpinner } from 'react-icons/fa'
 import axios from 'axios'
 
 const CreatePost = () => {
 
   const imgRef = useRef(null)
   const dispatch = useDispatch()
-  const { isError, message } = useSelector(state => state.posts);
+  const { posts: { isError, message, isLoading }, auth: { user } } = useSelector(state => state);
   
   const [error, setError] = useState({ isSet: false, msg: '' })
   const [form, setForm] = useState({
@@ -71,7 +72,7 @@ const CreatePost = () => {
       return
     }
     
-    dispatch(addPost(form))
+    dispatch(addPost({ ...form, user: user._id }))
     handleClear()
   }
 

@@ -8,7 +8,7 @@ const getAllPosts = async () => {
 }
 
 const getPost = async (id) => {
-  const response = await axios.get(`${API_URL}/${id}`)
+  const response = await axios.get(`/${API_URL}/${id}`)
   return response.data
 }
 

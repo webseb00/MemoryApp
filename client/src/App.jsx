@@ -4,7 +4,8 @@ import {
   Home,
   Login,
   Register,
-  Post
+  Post,
+  User
 } from './pages/'
 import ProtectedRoute from './utils/ProtectedRoute';
 
@@ -25,6 +26,7 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          <Route path="/user/:id" element={<User />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -21,26 +21,20 @@ const Home = () => {
       )
     }
 
-    // if(!posts.length) {
-    //   return (
-    //     <div className="col-span-12">
-    //       <h2 className="text-center text-xl mt-[8rem]">
-    //         No Memories found...
-    //         <FaRegDizzy className="text-center text-4xl mx-auto mt-3" />
-    //       </h2>
-    //     </div>
-    //   )
-    // }
+    if(!posts.length) {
+      return (
+        <div className="col-span-12">
+          <h2 className="text-center text-xl mt-[8rem]">
+            No Memories found...
+            <FaRegDizzy className="text-center text-4xl mx-auto mt-3" />
+          </h2>
+        </div>
+      )
+    }
 
-    return (
-      <>
-        <PostItem />
-        <PostItem />
-        <PostItem />
-        <PostItem />
-        <PostItem />
-      </>
-    )
+    return posts.map(post => (
+      <PostItem key={post._id} { ...post } />
+    ))
   }
 
   useEffect(() => {
@@ -57,7 +51,8 @@ const Home = () => {
           {!user 
             ? 
             <div
-            className="block p-6 max-w-[340px] bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+              className="block p-4 max-w-[340px] bg-white rounded-lg border border-gray-200 shadow-md 
+              hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
             >
               <p className="text-center leading-5">Please Sign In to create your own memories and like other's memories.</p>
             </div>

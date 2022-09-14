@@ -1,9 +1,13 @@
 import React from 'react'
-import image from '../assets/image-1.jpg'
 import { BsHandThumbsUpFill, BsArrowRightShort } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
-const PostItem = () => {
+const PostItem = ({ _id, title, description, thumbnail, tags }) => {
+
+  const cutDescription = () => {
+    const splitDesc = description.split(' ')
+    return `${splitDesc.slice(0, splitDesc.length/3).join(' ')}...`
+  }
 
   const handleVoteUp = () => {
 
@@ -11,12 +15,14 @@ const PostItem = () => {
 
   return (
     <div className="max-w-[340px] col-span-8 md:col-span-6 xl:col-span-4 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-      <img className="rounded-t-lg" src={image} />
+      <img className="rounded-t-lg" src={thumbnail} alt={title} />
       <div className="p-5">
-        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology</h5>
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h5>
+        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+          {cutDescription()}
+        </p>
         <Link 
-          to="/post/12345"
+          to={`post/${_id}`}
           className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           Read more <BsArrowRightShort className="ml-2 text-2xl text-white" />
         </Link>
@@ -30,7 +36,9 @@ const PostItem = () => {
             <span className="text-xl">53</span>
           </button>
           <p className="text-gray-400">
-            #tags #tags #testtag
+            {tags[0].split(' ').map((tag, idx) => (
+              <span className="mr-2" key={idx}>#{tag}</span>
+            ))}
           </p>
         </div>
       </div>

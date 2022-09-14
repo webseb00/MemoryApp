@@ -11,7 +11,7 @@ const getPost = asyncHandler(async (req, res) => {
   const postID = req.params.id
 
   const post = await Post.findById(postID)
-
+  
   if(!post) {
     res.status(400)
     throw new Error(`Post with ID: ${postID} not found!`)
