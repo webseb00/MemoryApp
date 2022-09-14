@@ -68,7 +68,9 @@ const loginUser = asyncHandler(async (req, res) => {
       path: '/'
     }))
 
-    res.status(200).json(user)
+    const { _id, firstName, lastName, email } = user
+
+    res.status(200).json({ _id, firstName, lastName, email })
   } else {
     res.status(404)
     throw new Error('Invalid password!')

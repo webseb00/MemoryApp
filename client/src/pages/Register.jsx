@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import axios from 'axios'
 
 const Register = () => {
 
@@ -15,6 +16,22 @@ const Register = () => {
   const { firstName, lastName, email, password, password2 } = form
 
   const [terms, setTerms] = useState(false) 
+
+  const registerUser = async () => {
+    const userData = {
+      firstName,
+      lastName,
+      email,
+      password
+    }
+
+    try {
+      const response = await axios.post('api/user', userData)
+      console.log(response)
+    } catch(err) {
+      console.log(err)
+    }
+  }
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -39,14 +56,10 @@ const Register = () => {
       setError({ isSet: true, msg: 'Please agree with terms and conditions.' })
       return
     }
-    
-  }
 
-  // return (
-  //   <div className="max-w-[540px] mx-auto my-[3rem]">
-      
-  //   </div>
-  // )
+
+    registerUser();
+  }
 
   return (
     <form className="max-w-[440px] mx-auto my-[3rem] rounded-md shadow-md bg-slate-50 p-8">

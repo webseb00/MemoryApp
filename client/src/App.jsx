@@ -6,6 +6,7 @@ import {
   Register,
   Post
 } from './pages/'
+import ProtectedRoute from './utils/ProtectedRoute';
 
 function App() {
   return (
@@ -16,7 +17,14 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/post/:id" element={<Post />} />
+          <Route 
+            path="/post/:id" 
+            element={
+              <ProtectedRoute>
+                <Post />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </BrowserRouter>
     </>
