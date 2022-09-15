@@ -1,6 +1,7 @@
 import React from 'react'
 import { BsHandThumbsUpFill, BsArrowRightShort } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 const PostItem = ({ _id, title, description, thumbnail, tags }) => {
 
@@ -44,6 +45,14 @@ const PostItem = ({ _id, title, description, thumbnail, tags }) => {
       </div>
     </div>
   )
+}
+
+PostItem.propTypes = {
+  _id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  thumbnail: PropTypes.string.isRequired,
+  tags: PropTypes.array
 }
 
 export default PostItem

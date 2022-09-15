@@ -79,8 +79,8 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const getUser = asyncHandler(async (req, res) => {
   const userID = req.params.id
-  console.log(req.params.id)
-  const user = await User.findById(userID)
+  
+  const user = await User.findById(userID).select('-password')
 
   if(!user) {
     res.status(404)
