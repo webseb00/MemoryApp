@@ -1,16 +1,38 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
+import { CommentItem } from './index'
 
 const Comments = ({ postID, userID }) => {
 
-  const [form, setForm] = useState({
-    comment: ''
-  })
+  const [comments, setComments] = useState([])
+  const [text, setText] = useState('')
 
-  const handleSubmit = e => {
+  useEffect(() => {
+    fetchComments()
+  }, [])
+
+  const fetchComments = async () => {
+    const { data } = await axios.get(`/api/comment/${postID}`)
+    setComments([ ...data ])
+  }
+
+  const handleSubmit = async e => {
     e.preventDefault();
 
+    if(!text) {
+      return
+    }
 
+    const obj = {
+      text,
+      postID,
+      userID
+    }
+
+    await axios.post('/api/comment', obj)
+    setText('')
+    fetchComments()
   }
 
   return (
@@ -26,8 +48,8 @@ const Comments = ({ postID, userID }) => {
               placeholder="Write a comment..." 
               required
               name="comment"
-              value={form.comment}
-              onChange={(e) => setForm({ comment: e.target.value })}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
             ></textarea>
           </div>
           <div className="flex justify-between items-center py-2 px-3 border-t dark:border-gray-600">
@@ -43,7 +65,10 @@ const Comments = ({ postID, userID }) => {
         </div>
       </form>
       <ul>
-        comments list
+        {comments ? 
+        comments.map(item => (
+          <CommentItem key={item._id} {...item} />
+        )) : 'No comments found...'}
       </ul>
     </div>
   )

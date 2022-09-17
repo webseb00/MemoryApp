@@ -40,7 +40,7 @@ const Header = () => {
                 <>
                   <div className="w-[30px] h-[30px] bg-white text-blue-600 font-semibold text-lg rounded-full mr-4">
                     <span className="block mt-[2px]">
-                      {user.firstName.split('')[0].toUpperCase()}{user.lastName.split('')[1].toUpperCase()}
+                      {user.firstName.split('')[0].toUpperCase()}{user.lastName.split('')[0].toUpperCase()}
                     </span>
                   </div>
                   <span>User panel</span>

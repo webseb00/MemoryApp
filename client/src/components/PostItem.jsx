@@ -7,7 +7,7 @@ const PostItem = ({ _id, title, description, thumbnail, tags }) => {
 
   const cutDescription = () => {
     const splitDesc = description.split(' ')
-    return `${splitDesc.slice(0, splitDesc.length/3).join(' ')}...`
+    return `${splitDesc.slice(0, 20).join(' ')}...`
   }
 
   const handleVoteUp = () => {
@@ -16,7 +16,7 @@ const PostItem = ({ _id, title, description, thumbnail, tags }) => {
 
   return (
     <div className="max-w-[340px] col-span-8 md:col-span-6 xl:col-span-4 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-      <img className="rounded-t-lg" src={thumbnail} alt={title} />
+      <img className="rounded-t-lg w-full max-w-[340px] h-[200px] object-cover" src={thumbnail} alt={title} />
       <div className="p-5">
         <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h5>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">

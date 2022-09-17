@@ -9,8 +9,8 @@ const auth = asyncHandler(async (req, res, next) => {
   if(cookies.token) {
     try {
       const decoded = jwt.decode(cookies.token, process.env.JWT_TOKEN)
-      req.user = await User.findById(decoded.id).select('-password')
-
+      req.user = await User.findById(decoded.id)
+      
       next()
     } catch(err) {
       throw new Error(err)

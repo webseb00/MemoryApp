@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { PostItem, CreatePost } from '../components'
 import { useSelector, useDispatch } from 'react-redux'
 import { getAllPosts } from '../features/posts/postsSlice'
-import { FaSpinner, FaRegDizzy } from 'react-icons/fa'
+import { FaRegDizzy } from 'react-icons/fa'
+import { Loader } from '../components'
 
 const Home = () => {
 
@@ -13,10 +14,7 @@ const Home = () => {
     if(isLoading) {
       return (
         <div className="col-span-12">
-          <h2 className="text-center text-xl mt-[8rem]">
-            Loading...
-            <FaSpinner className="text-center text-4xl mx-auto mt-3 animate-spin" />
-          </h2>
+          <Loader />
         </div>
       )
     }

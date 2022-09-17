@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPost } from '../features/posts/postsSlice'
-import { FaSpinner } from 'react-icons/fa'
 import axios from 'axios'
+import { Loader } from '../components/'
 import { Comments } from '../components/'
 
 const Post = () => {
@@ -20,16 +20,16 @@ const Post = () => {
 
   useEffect(() => {
     dispatch(getPost(id))
-    getUser();
   }, [])
 
+  useEffect(() => {
+    if(post.user) {
+      getUser();
+    }
+  }, [post])
+
   if(isLoading) {
-    return (
-      <h2 className="text-center text-xl mt-[8rem]">
-        Loading...
-        <FaSpinner className="text-center text-4xl mx-auto mt-3 animate-spin" />
-      </h2>
-    )
+    return <Loader />
   }
 
   if(isError) {
@@ -55,14 +55,19 @@ const Post = () => {
             <p className="my-4">{post.description}</p>
             <h5 className="font-semibold text-lg">
               Created by: 
-              {user.length && (
+              {user && (
                 <Link to={`/user/${post.user}`} className="text-blue-700 ml-2">
                   {user}
                 </Link>
               )}
             </h5>
             <div className="py-3 border-t border-b my-4">
-              <Comments postID={id} userID={post.user} />
+              {post.user &&
+                <Comments
+                  postID={id}
+                  userID={post.user}
+                />
+              }
             </div>
           </div>  
           <div className="flex-1 text-right">

@@ -44,14 +44,14 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
+  
   if(!email || !password) {
     res.status(400)
     throw new Error('Please fill all fields!')
   }
 
   const user = await User.findOne({ email })
-
+  
   if(!user) {
     res.status(400)
     throw new Error('User not found!')
@@ -64,7 +64,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
     res.setHeader('Set-Cookie', cookie.serialize('token', token, {
       maxAge: 60*60,
-      sameSite: false,
+      sameSite: true,
       path: '/'
     }))
 
