@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import { CommentItem } from './index'
+import { FaSpinner } from 'react-icons/fa'
 
 const Comments = ({ postID, userID }) => {
 
+  const [isLoading, setIsLoading] = useState(false)
   const [comments, setComments] = useState([])
   const [text, setText] = useState('')
 
@@ -24,6 +26,8 @@ const Comments = ({ postID, userID }) => {
       return
     }
 
+    setIsLoading(true)
+
     const obj = {
       text,
       postID,
@@ -32,6 +36,7 @@ const Comments = ({ postID, userID }) => {
 
     await axios.post('/api/comment', obj)
     setText('')
+    setIsLoading(false)
     fetchComments()
   }
 
@@ -59,12 +64,12 @@ const Comments = ({ postID, userID }) => {
               text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 
               dark:focus:ring-blue-900 hover:bg-blue-800"
             >
-              Add comment
+              {isLoading ? <FaSpinner className="animate-spin text-lg text-white" /> : 'Add Comment'}
             </button>
           </div>
         </div>
       </form>
-      <ul>
+      <ul className="max-h-[800px] overflow-y-auto">
         {comments ? 
         comments.map(item => (
           <CommentItem key={item._id} {...item} />

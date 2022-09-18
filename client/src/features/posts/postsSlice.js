@@ -35,11 +35,24 @@ export const addPost = createAsyncThunk('posts/addPost', async (post, { rejectWi
   }
 })
 
+export const updatePost = createAsyncThunk('posts/updatePost', async (post, { rejectWithValue }) => {
+  try {
+    return await postsService.updatePost(post)
+  } catch(err) {
+    return rejectWithValue(err.response.data.message || err.response.statusText || err.message)
+  }
+})
+
 export const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    
+    reset: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = false;
+      state.message = '';
+    } 
   },
   extraReducers: (builder) => {
     builder
@@ -80,7 +93,22 @@ export const postsSlice = createSlice({
         state.isLoading = false;
         state.message = action.payload
       })
+      .addCase(updatePost.pending, state => {
+        state.isLoading = true
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.post = action.payload
+      })
+      .addCase(updatePost.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.message = action.payload
+      })
   }
 })
+
+export const { reset } = postsSlice.actions
 
 export default postsSlice.reducer

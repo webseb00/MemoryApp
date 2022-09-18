@@ -17,10 +17,16 @@ const addPost = async (post) => {
   return response.data
 }
 
+const updatePost = async (post) => {
+  const response = await axios.put(`/${API_URL}/${post._id}`, post)
+  return response.data
+}
+
 const postsService = {
   getAllPosts,
   getPost,
-  addPost
+  addPost,
+  updatePost
 }
 
 export default postsService

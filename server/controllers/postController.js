@@ -54,14 +54,16 @@ const updatePost = asyncHandler(async (req, res) => {
     throw new Error(`Post with ID: ${postID} not found!`)
   }
 
-  const { title, description, thumbnail, tags } = req.body
+  let { title, description, tags, thumbnail } = req.body
 
-  if(!title || !description || !thumbnail || !tags) {
+  if(!thumbnail) thumbnail = post.thumbnail
+
+  if(!title || !description || !tags) {
     res.status(400)
     throw new Error('Please fill all required fields!')
   }
 
-  const newPost = { title, description, thumbnail, tags }
+  const newPost = { title, description, tags, thumbnail }
 
   const updatedPost = await Post.findByIdAndUpdate(postID, newPost, { new: true })
 

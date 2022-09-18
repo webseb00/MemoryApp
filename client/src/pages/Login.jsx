@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { userSignIn } from '../features/auth/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { userSignIn, reset } from '../features/auth/authSlice'
 
 const Login = () => {
-
   const navigate = useNavigate('/')
   const dispatch = useDispatch();
+  const { isSuccess, user, isError, message } = useSelector((state) => state.auth)
 
   const [error, setError] = useState({ isSet: false, msg: '' })
   const [form, setForm] = useState({
@@ -30,9 +30,19 @@ const Login = () => {
     }
     
     dispatch(userSignIn(form))
-
-    navigate('/')
   }
+
+  useEffect(() => {
+    if(isError) {
+      setError({ isSet: true, msg: message })
+    }
+
+    if(user && isSuccess) {
+      navigate('/')
+    }
+
+    dispatch(reset())
+  }, [user, isError, isSuccess, message, dispatch])
 
   return (
     <form className="max-w-[340px] mx-auto my-[3rem] rounded-md shadow-md bg-slate-50 p-8">
@@ -75,6 +85,11 @@ const Login = () => {
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           Sign In
         </button>
+        {error.isSet && (
+          <div className="my-2">
+            <p className="text-center text-red-600 text-lg">{error.msg}</p>
+          </div>
+        )}
         <p className="my-4 text-gray-500 text-center">
           You don't have an account? <br />
           <Link to="/register" className="text-blue-600 underline ml-2">Sign Up</Link>

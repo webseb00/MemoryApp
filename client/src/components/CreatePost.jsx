@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addPost } from '../features/posts/postsSlice'
-import { FaSpinner } from 'react-icons/fa'
 import axios from 'axios'
 
 const CreatePost = () => {
@@ -47,8 +46,6 @@ const CreatePost = () => {
     data.append('file', image)
     data.append('upload_preset', 'memoryApp')
     data.append('cloud_name', 'dlgcq1hg1')
-
-    if(!image) return;
     
     try {
       const { data: { url } } = await axios.post("https://api.cloudinary.com/v1_1/dlgcq1hg1/image/upload", data)
@@ -67,11 +64,11 @@ const CreatePost = () => {
 
     setError({ isSet: false, msg: '' })
 
-    if(!title || !description || !tags) {
+    if(!title || !description || !tags || !thumbnail) {
       setError({ isSet: true, msg: 'Please fill form with proper values!' })
       return
     }
-    
+
     dispatch(addPost({ ...form, user: user._id }))
     handleClear()
   }

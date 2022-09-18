@@ -40,8 +40,13 @@ const Home = () => {
   }, [])
   
   return (
-    <div className="container px-2 sm:px-4 py-2.5 mx-auto mt-6">
+    <div className="container px-2 sm:px-4 py-2.5 mx-auto mb-[2rem]">
       <div className="grid gap-2 grid-cols-12">
+        <div className="col-span-12">
+          <h2 className="text-center my-[2rem] text-2xl">
+            Share your best memories <br /><span className="text-blue-600 font-semibold">around the world!</span>
+          </h2>
+        </div>
         <div className="grid grid-cols-12 col-span-12 lg:col-span-9 gap-2 justify-items-stretch">
           {renderContent()}
         </div>
