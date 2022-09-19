@@ -9,11 +9,22 @@ import {
 } from './pages/'
 import ProtectedRoute from './utils/ProtectedRoute';
 import Cookies from 'universal-cookie'
+import { useEffect } from 'react';
+import { userSignOut } from './features/auth/authSlice'
+import { useDispatch, useSelector } from 'react-redux';
 
 function App() {
 
+  const { user } = useSelector(state => state.auth)
+  const dispatch = useDispatch()
   const navigate = useNavigate('/')
   const cookies = new Cookies()
+
+  useEffect(() => {
+    if(!cookies.get('token') && user?._id) {
+      dispatch(userSignOut())
+    }
+  }, [navigate])
 
   return (
     <>

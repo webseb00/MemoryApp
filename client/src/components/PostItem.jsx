@@ -1,9 +1,15 @@
-import React from 'react'
+import { useState } from 'react'
 import { BsHandThumbsUpFill, BsArrowRightShort } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { voteUpPost } from '../features/posts/postsSlice'
 import PropTypes from 'prop-types'
 
-const PostItem = ({ _id, title, description, thumbnail, tags }) => {
+const PostItem = ({ _id, title, description, thumbnail, tags, votes }) => {
+
+  const [votesNum, setVotesNum] = useState(votes.length || 0)
+  const { user } = useSelector(state => state.auth)
+  const dispatch = useDispatch()
 
   const cutDescription = () => {
     const splitDesc = description.split(' ')
@@ -11,7 +17,19 @@ const PostItem = ({ _id, title, description, thumbnail, tags }) => {
   }
 
   const handleVoteUp = () => {
+    if(user?._id) {
+      const findVote = votes.find(el => el === user._id);
 
+      if(!findVote) {
+        const obj = {
+          userID: user._id,
+          id: _id
+        }
+
+        setVotesNum(prev => prev+1)
+        dispatch(voteUpPost(obj))
+      }
+    }    
   }
 
   return (
@@ -34,7 +52,7 @@ const PostItem = ({ _id, title, description, thumbnail, tags }) => {
             className="mb-2 text-blue-500 flex items-center border-none outline-none"
           >
             <BsHandThumbsUpFill className="text-2xl mr-2" /> 
-            <span className="text-xl">53</span>
+            <span className="text-xl">{votesNum}</span>
           </button>
           <p className="text-gray-400">
             {tags[0].split(' ').map((tag, idx) => (
@@ -52,7 +70,8 @@ PostItem.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   thumbnail: PropTypes.string.isRequired,
-  tags: PropTypes.array
+  tags: PropTypes.array,
+  meta: PropTypes.object
 }
 
 export default PostItem

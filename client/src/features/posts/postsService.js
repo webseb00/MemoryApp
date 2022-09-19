@@ -22,11 +22,17 @@ const updatePost = async (post) => {
   return response.data
 }
 
+const voteUpPost = async (data) => {
+  const response = await axios.put(`/${API_URL}/vote/${data.id}`, { userID: data.userID })
+  return response.data
+}
+
 const postsService = {
   getAllPosts,
   getPost,
   addPost,
-  updatePost
+  updatePost,
+  voteUpPost
 }
 
 export default postsService

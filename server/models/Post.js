@@ -17,9 +17,7 @@ const postModel = new mongoose.Schema({
     ref: 'Comment'
   }],
   tags: [String],
-  meta: {
-    votes: [{ type: Number, user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } }]
-  },
+  votes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

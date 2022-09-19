@@ -43,6 +43,14 @@ export const updatePost = createAsyncThunk('posts/updatePost', async (post, { re
   }
 })
 
+export const voteUpPost = createAsyncThunk('posts/voteUp', async (data, { rejectWithValue }) => {
+  try {
+    return await postsService.voteUpPost(data)
+  } catch(err) {
+    return rejectWithValue(err.response.data.message || err.response.statusText || err.message)
+  }
+})
+
 export const postsSlice = createSlice({
   name: 'posts',
   initialState,

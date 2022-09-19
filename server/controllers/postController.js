@@ -85,10 +85,27 @@ const deletePost = asyncHandler(async (req, res) => {
   res.status(200).json('Post deleted!')
 })
 
+const voteUpPost = asyncHandler(async (req, res) => {
+  const postID = req.params.id
+  const userID = req.body.userID
+
+  const post = await Post.findById(postID)
+
+  if(!post) {
+    res.status(400)
+    throw new Error(`Post with ID: ${postID} not found!`)
+  }
+
+  const updatedPost = await Post.findByIdAndUpdate(postID, { votes: userID }, { new: true })
+
+  res.status(200).json({ msg: "Post up voted!" })
+})
+
 module.exports = {
   getAllPosts,
   getPost,
   addPost,
   updatePost,
-  deletePost
+  deletePost,
+  voteUpPost
 }
