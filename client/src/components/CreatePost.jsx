@@ -1,23 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addPost } from '../features/posts/postsSlice'
+import { FaPlus, FaSpinner } from 'react-icons/fa'
 import axios from 'axios'
 
 const CreatePost = () => {
 
   const imgRef = useRef(null)
   const dispatch = useDispatch()
-  const { posts: { isError, message, isLoading }, auth: { user } } = useSelector(state => state);
+  const { posts: { isError, message }, auth: { user } } = useSelector(state => state);
   
+  const [loading, setLoading] = useState(false)
+  const [active, setActive] = useState(false)
   const [error, setError] = useState({ isSet: false, msg: '' })
   const [form, setForm] = useState({
     title: '',
     description: '',
-    tags: '',
-    thumbnail: ''
+    tags: ''
   })
+  const [imageData, setImageData] = useState(null)
 
-  const { title, description, tags, thumbnail } = form
+  const { title, description, tags } = form
 
   useEffect(() => {
     if(isError) {
@@ -29,52 +32,71 @@ const CreatePost = () => {
     setForm({ 
       title: '',
       description: '',
-      tags: '',
-      thumbnail: ''
+      tags: ''
     })
   }
 
-  const handleUploadImage = async () => {
-    const image = imgRef.current.files[0]
-
-    if(!image) {
-      setError({ isSet: true, msg: 'Please add thumbnail!' })
-    }
-
-    const data = new FormData()
-
-    data.append('file', image)
-    data.append('upload_preset', 'memoryApp')
-    data.append('cloud_name', 'dlgcq1hg1')
-    
+  const handleUploadImage = async () => {    
     try {
-      const { data: { url } } = await axios.post("https://api.cloudinary.com/v1_1/dlgcq1hg1/image/upload", data)
-      setForm({ ...form, thumbnail: url })
+      const { data: { url } } = await axios.post("https://api.cloudinary.com/v1_1/dlgcq1hg1/image/upload", imageData)
+      return url
     } catch(err) {  
       console.log(err)
     }
   }
 
-  const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+  const handleImage = () => {
+    const image = imgRef.current.files[0]
+    const data = new FormData()
+
+    data.append('file', image)
+    data.append('upload_preset', 'memoryApp')
+    data.append('cloud_name', 'dlgcq1hg1')
+
+    setImageData(data)
   }
 
-  const handleSubmit = e => {
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value })
+
+  const handleSubmit = async e => {
     e.preventDefault()
 
+    setLoading(true)
     setError({ isSet: false, msg: '' })
 
-    if(!title || !description || !tags || !thumbnail) {
+    if(!title || !description || !tags) {
       setError({ isSet: true, msg: 'Please fill form with proper values!' })
+      setLoading(false)
       return
     }
 
-    dispatch(addPost({ ...form, user: user._id }))
-    handleClear()
+    if(!imgRef.current.files[0]) {
+      setError({ isSet: true, msg: 'Please add thumbnail!' })
+      return
+    }
+
+    if(imageData) {
+      const thumbnail = await handleUploadImage()
+
+      dispatch(addPost({ ...form, thumbnail, user: user._id }))
+
+      setLoading(false)
+      handleClear()
+    }
   }
 
+  const handleActive = () => setActive(prev=>!prev)
+
   return (
-    <form className="block p-6 max-w-[340px] bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+    <form className={`block p-6 w-full max-w-[380px] bg-white rounded-lg border border-gray-200 shadow-md
+    dark:bg-gray-800 fixed top-[10%] left-0 ${!active ? '-translate-x-[100%]' : '-translate-x-[0%]'} transition duration-300`}>
+      <div className="absolute top-[40px] right-[-40px] bg-blue-700 text-white 
+        w-[40px] h-[40px] rounded-r-md shadow-md flex items-center justify-center cursor-pointer
+        hover:opacity-70 duration-300"
+        onClick={handleActive}
+      >
+        <FaPlus className="text-2xl" />
+      </div>
       {error.isSet && (
         <div className="my-2">
           <p className="text-center text-red-600 text-lg">{error.msg}</p>
@@ -116,14 +138,16 @@ const CreatePost = () => {
       <div className="mb-3">
         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" htmlFor="file_input">Upload file</label>
         <input 
-          className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+          className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 
+          cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 
+          dark:border-gray-600 dark:placeholder-gray-400" 
           aria-describedby="file_input_help" 
           id="file_input" 
           type="file"
           ref={imgRef}
           accept=".jpg, .jpeg, .png"
           name="thumbnail" 
-          onChange={handleUploadImage}
+          onChange={handleImage}
           required
         />
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">PNG, JPG, JPEG</p>
@@ -131,10 +155,12 @@ const CreatePost = () => {
       <div className="flex flex-col">
         <button 
           type="submit" 
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 
+          font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 
+          focus:outline-none dark:focus:ring-blue-800 ${!imageData ? 'opacity-70 pointer-events-none' : 'opacity-100'}`}
           onClick={handleSubmit}
         >
-          Submit
+          {loading ? <FaSpinner className="animate-spin" /> : 'Submit'}
         </button>
         <button 
           type="button" 

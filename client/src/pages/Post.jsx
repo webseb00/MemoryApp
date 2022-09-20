@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPost, reset } from '../features/posts/postsSlice'
+import { getPost, reset, deletePost as removePost } from '../features/posts/postsSlice'
 import axios from 'axios'
 import { 
   Loader, 
@@ -13,14 +13,23 @@ import {
 
 const Post = () => {
 
+  const navigate = useNavigate()
   const { id } = useParams()
   const dispatch = useDispatch()
-  const { posts: { post, isLoading, isError, isSuccess, message }, auth } = useSelector(state => state)
+  const { post, isLoading, isError, message } = useSelector(state => state.posts)
+
   const [user, setUser] = useState('')
   const [active, setActive] = useState(false)
 
   const deletePost = () => {
-    console.log(id);
+    const confirm = window.confirm('Are you sure? Your memory will be lost...')
+
+    if(confirm) {
+      dispatch(removePost(id))
+      dispatch(reset())
+
+      navigate('/')
+    }
   }
 
   const getUser = async () => {
@@ -37,12 +46,6 @@ const Post = () => {
       getUser();
     }
   }, [post])
-
-  useEffect(() => {
-    if(isSuccess) {
-      dispatch(reset())
-    }
-  }, [isSuccess])
 
   if(isLoading) {
     return <Loader />

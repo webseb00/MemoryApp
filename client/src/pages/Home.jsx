@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
 import { PostItem, CreatePost } from '../components'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAllPosts } from '../features/posts/postsSlice'
+import { getAllPosts, reset } from '../features/posts/postsSlice'
 import { FaRegDizzy } from 'react-icons/fa'
 import { Loader } from '../components'
 
 const Home = () => {
 
   const dispatch = useDispatch()
-  const { auth: { user }, posts: { isLoading, isError, message, posts } } = useSelector(state => state)
+  const { auth: { user }, posts: { isLoading, posts } } = useSelector(state => state)
 
   const renderContent = () => {
     if(isLoading) {
@@ -47,24 +47,10 @@ const Home = () => {
             Share your best memories <br /><span className="text-blue-600 font-semibold">around the world!</span>
           </h2>
         </div>
-        <div className="grid grid-cols-12 col-span-12 lg:col-span-9 gap-2 justify-items-stretch">
+        <div className="grid grid-cols-12 col-span-12 lg:col-span-12 gap-2 justify-items-stretch">
           {renderContent()}
         </div>
-        <div className="col-span-12 lg:col-span-3">
-          {!user 
-            ? 
-            <div
-              className="block p-4 max-w-[340px] bg-white rounded-lg border border-gray-200 shadow-md 
-              hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-            >
-              <p className="text-center leading-5">Please Sign In to create your own memories and like other's memories.</p>
-            </div>
-            :
-            <>
-              <CreatePost />
-            </>
-          }
-        </div>
+        {user && <CreatePost />}
       </div>
     </div>
   )

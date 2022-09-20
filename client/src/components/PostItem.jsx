@@ -33,7 +33,7 @@ const PostItem = ({ _id, title, description, thumbnail, tags, votes }) => {
   }
 
   return (
-    <div className="max-w-[340px] col-span-8 md:col-span-6 xl:col-span-4 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+    <div className="max-w-[340px] col-span-8 md:col-span-6 xl:col-span-3 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
       <img className="rounded-t-lg w-full max-w-[340px] h-[200px] object-cover" src={thumbnail} alt={title} />
       <div className="p-5">
         <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h5>

@@ -22,6 +22,11 @@ const updatePost = async (post) => {
   return response.data
 }
 
+const deletePost = async (postID) => {
+  const response = await axios.delete(`/${API_URL}/${postID}`)
+  return response.data
+}
+
 const voteUpPost = async (data) => {
   const response = await axios.put(`/${API_URL}/vote/${data.id}`, { userID: data.userID })
   return response.data
@@ -32,6 +37,7 @@ const postsService = {
   getPost,
   addPost,
   updatePost,
+  deletePost,
   voteUpPost
 }
 

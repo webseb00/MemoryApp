@@ -43,6 +43,14 @@ export const updatePost = createAsyncThunk('posts/updatePost', async (post, { re
   }
 })
 
+export const deletePost = createAsyncThunk('posts/deletePost', async (postID, { rejectWithValue }) => {
+  try {
+    return await postsService.deletePost(postID)
+  } catch(err) {
+    return rejectWithValue(err.response.data.message || err.response.statusText || err.message)
+  }
+})
+
 export const voteUpPost = createAsyncThunk('posts/voteUp', async (data, { rejectWithValue }) => {
   try {
     return await postsService.voteUpPost(data)
@@ -110,6 +118,19 @@ export const postsSlice = createSlice({
         state.post = action.payload
       })
       .addCase(updatePost.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.message = action.payload
+      })
+      .addCase(deletePost.pending, state => {
+        state.isLoading = true
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.post = action.payload
+      })
+      .addCase(deletePost.rejected, (state, action) => {
         state.isError = true;
         state.isLoading = false;
         state.message = action.payload

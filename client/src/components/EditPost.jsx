@@ -29,6 +29,7 @@ const EditPost = ({ setActive, active, postID }) => {
     
     if(isSuccess) {
       dispatch(reset())
+      setActive(false)
     }
   }, [isError, isSuccess])
 
