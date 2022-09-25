@@ -7,6 +7,7 @@ import Loader from "./Loader";
 import Related from "./Related";
 import EditPost from './EditPost'
 import PostCTA from "./PostCTA";
+import SearchPanel from "./SearchPanel";
 
 export {
   Header,
@@ -17,5 +18,6 @@ export {
   Loader,
   Related,
   EditPost,
-  PostCTA
+  PostCTA,
+  SearchPanel
 }

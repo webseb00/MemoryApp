@@ -7,6 +7,26 @@ const getAllPosts = asyncHandler(async (req, res) => {
   res.status(200).json(posts)
 })
 
+const getSearchPosts = asyncHandler(async (req, res) => {
+  const method = req.params.method
+  const term = req.params.term
+
+  let posts;
+
+  if(method === 'title') {
+    posts = await Post.find({ "title": { "$regex": term, "$options": "i" } }).exec()
+  } else {
+    posts = await Post.find({ "tags": { "$regex": term, "$options": "i" } }).exec()
+  }
+
+  if(!posts) {
+    res.status(400)
+    throw new Error('No posts found...')
+  }
+
+  res.status(200).json(posts)
+})
+
 const getPost = asyncHandler(async (req, res) => {
   const postID = req.params.id
 
@@ -103,6 +123,7 @@ const voteUpPost = asyncHandler(async (req, res) => {
 
 module.exports = {
   getAllPosts,
+  getSearchPosts,
   getPost,
   addPost,
   updatePost,

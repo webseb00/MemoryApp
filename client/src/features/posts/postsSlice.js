@@ -59,6 +59,14 @@ export const voteUpPost = createAsyncThunk('posts/voteUp', async (data, { reject
   }
 })
 
+export const searchPosts = createAsyncThunk('posts/search', async (urlParams, { rejectWithValue }) => {
+  try {
+    return await postsService.searchPosts(urlParams)
+  } catch(err) {
+    return rejectWithValue(err.response.data.message || err.response.statusText || err.message)
+  }
+})
+
 export const postsSlice = createSlice({
   name: 'posts',
   initialState,
@@ -133,6 +141,18 @@ export const postsSlice = createSlice({
       .addCase(deletePost.rejected, (state, action) => {
         state.isError = true;
         state.isLoading = false;
+        state.message = action.payload
+      })
+      .addCase(searchPosts.pending, state => {
+        state.isLoading = true
+      })
+      .addCase(searchPosts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.posts = action.payload;
+      })
+      .addCase(searchPosts.rejected, (state, action) => {
+        state.isError = true;
         state.message = action.payload
       })
   }

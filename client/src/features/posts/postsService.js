@@ -32,8 +32,15 @@ const voteUpPost = async (data) => {
   return response.data
 }
 
+const searchPosts = async (data) => {
+  const { searchingMethod, searchingTerm } = data
+  const response = await axios.get(`/${API_URL}/${searchingMethod}/${searchingTerm}`)
+  return response.data
+}
+
 const postsService = {
   getAllPosts,
+  searchPosts,
   getPost,
   addPost,
   updatePost,

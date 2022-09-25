@@ -33,8 +33,8 @@ const PostItem = ({ _id, title, description, thumbnail, tags, votes }) => {
   }
 
   return (
-    <div className="max-w-[340px] col-span-8 md:col-span-6 xl:col-span-3 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-      <img className="rounded-t-lg w-full max-w-[340px] h-[200px] object-cover" src={thumbnail} alt={title} />
+    <div className="max-w-[330px] w-full bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+      <img className="rounded-t-lg w-full max-w-[330px] h-[200px] object-cover" src={thumbnail} alt={title} />
       <div className="p-5">
         <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h5>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
@@ -54,7 +54,7 @@ const PostItem = ({ _id, title, description, thumbnail, tags, votes }) => {
             <BsHandThumbsUpFill className="text-2xl mr-2" /> 
             <span className="text-xl">{votesNum}</span>
           </button>
-          <p className="text-gray-400">
+          <p className="text-gray-400 flex flex-wrap">
             {tags[0].split(' ').map((tag, idx) => (
               <span className="mr-2" key={idx}>#{tag}</span>
             ))}
