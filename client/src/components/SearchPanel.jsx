@@ -28,9 +28,9 @@ const SearchPanel = () => {
 
     const obj = {
       searchingMethod: searchMethod,
-      searchingTerm: term
+      searchingTerm: searchMethod === 'tags' ? term.split(' ') : term
     }
-
+    
     dispatch(searchPosts(obj))
   }
 

@@ -1,14 +1,22 @@
 import { useEffect } from 'react'
 import { PostItem, CreatePost, SearchPanel } from '../components'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAllPosts, reset } from '../features/posts/postsSlice'
+import { getAllPosts } from '../features/posts/postsSlice'
 import { FaRegDizzy } from 'react-icons/fa'
 import { Loader } from '../components'
+import { Pagination } from 'flowbite-react'
 
 const Home = () => {
 
   const dispatch = useDispatch()
-  const { auth: { user }, posts: { isLoading, posts } } = useSelector(state => state)
+  const { auth: { user }, posts: { isLoading, posts, page } } = useSelector(state => state)
+
+  const handlePageChange = e => {
+    if(e > page.totalPages) return;
+    if(e === page.current) return;
+    
+    dispatch(getAllPosts({ page: e, limit: 3 }))
+  }
 
   const renderContent = () => {
     if(isLoading) {
@@ -36,7 +44,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    dispatch(getAllPosts())
+    dispatch(getAllPosts({ page: 1, limit: 3 }))
   }, [])
 
   return (
@@ -52,6 +60,13 @@ const Home = () => {
         </div>
         {user && <CreatePost />}
         <SearchPanel />
+      </div>
+      <div className="mt-[3rem] flex justify-center items-center">
+        <Pagination
+          currentPage={page.current}
+          totalPages={page.totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   )

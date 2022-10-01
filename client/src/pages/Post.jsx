@@ -111,7 +111,11 @@ const Post = () => {
           postID={id}
         />
       }
-      <Related />
+      {post.tags && 
+      <Related 
+        tags={post.tags} 
+        postID={post._id} 
+      />}
     </div>
   )
 }

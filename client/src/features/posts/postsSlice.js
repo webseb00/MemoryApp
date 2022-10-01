@@ -3,6 +3,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import postsService from './postsService'
 
 const initialState = {
+  page: {
+    current: 1,
+    totalPages: 3
+  },
   posts: [],
   post: [],
   isLoading: false,
@@ -11,9 +15,9 @@ const initialState = {
   message: ''
 }
 
-export const getAllPosts = createAsyncThunk('posts/getAll', async (_, { rejectWithValue }) => {
+export const getAllPosts = createAsyncThunk('posts/getAll', async (options, { rejectWithValue }) => {
   try {
-    return await postsService.getAllPosts()
+    return await postsService.getAllPosts(options)
   } catch(err) {
     return rejectWithValue(err.message)
   }
@@ -86,7 +90,9 @@ export const postsSlice = createSlice({
       .addCase(getAllPosts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.posts = action.payload;
+        state.posts = action.payload.posts;
+        state.page.current = Number(action.payload.currentPage);
+        state.page.totalPages = action.payload.totalPages;
       })
       .addCase(getAllPosts.rejected, (state, action) => {
         state.isError = true;

@@ -2,21 +2,36 @@ const Post = require('../models/Post')
 const asyncHandler = require('express-async-handler')
 
 const getAllPosts = asyncHandler(async (req, res) => {
+  const { num, limit } = req.query
+  const pageOptions = {
+    page: Number(num),
+    limit: Number(limit)
+  }
+  
   const posts = await Post.find({})
-
-  res.status(200).json(posts)
+    .skip((pageOptions.page-1) * pageOptions.limit)
+    .limit(pageOptions.limit)
+  
+  const count = await Post.countDocuments()
+  
+  res.status(200).json({
+    posts,
+    totalPages: Math.ceil(count/limit),
+    currentPage: num
+  })
 })
 
 const getSearchPosts = asyncHandler(async (req, res) => {
   const method = req.params.method
-  const term = req.params.term
-
   let posts;
 
   if(method === 'title') {
-    posts = await Post.find({ "title": { "$regex": term, "$options": "i" } }).exec()
+    posts = await Post.find({ "title": { "$regex": req.body.term, "$options": "i" } }).exec()
   } else {
-    posts = await Post.find({ "tags": { "$regex": term, "$options": "i" } }).exec()
+    let filter = { tags: req.body.tags };
+    filter.tags = { $in: filter.tags.map(t => new RegExp(t)) };
+
+    posts = await Post.find(filter).exec()
   }
 
   if(!posts) {

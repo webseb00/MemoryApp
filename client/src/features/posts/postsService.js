@@ -2,8 +2,8 @@ import axios from 'axios'
 
 const API_URL = 'api/post'
 
-const getAllPosts = async () => {
-  const response = await axios.get(API_URL);
+const getAllPosts = async ({ page, limit }) => {
+  const response = await axios.get(`/${API_URL}/page?num=${page}&limit=${limit}`);
   return response.data
 }
 
@@ -34,7 +34,15 @@ const voteUpPost = async (data) => {
 
 const searchPosts = async (data) => {
   const { searchingMethod, searchingTerm } = data
-  const response = await axios.get(`/${API_URL}/${searchingMethod}/${searchingTerm}`)
+  let response;
+
+  if(searchingMethod === 'tags') {
+    response = await axios.post(`/${API_URL}/${searchingMethod}`, { tags: searchingTerm })
+  } else {
+    response = await axios.post(`/${API_URL}/${searchingMethod}`, { term: searchingTerm })
+  }
+  
+  console.log(response)
   return response.data
 }
 
