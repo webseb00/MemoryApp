@@ -1,4 +1,4 @@
-# Pizza Delivery App
+# Memory App
 
 Simple App created with Create React App, Redux Toolkit, React Router, Tailwind CSS and Express.js, MongoDB in the backend.
 
