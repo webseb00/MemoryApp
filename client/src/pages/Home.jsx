@@ -50,7 +50,7 @@ const Home = () => {
   return (
     <div className="container px-2 sm:px-4 py-2.5 mx-auto mb-[2rem]">
       <div className="flex flex-col">
-        <div className="col-span-12">
+        <div>
           <h2 className="text-center my-[2rem] text-2xl">
             Share your best memories <br /><span className="text-blue-600 font-semibold">around the world!</span>
           </h2>

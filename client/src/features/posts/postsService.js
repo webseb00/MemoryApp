@@ -3,7 +3,7 @@ import axios from 'axios'
 const API_URL = 'api/post'
 
 const getAllPosts = async ({ page, limit }) => {
-  const response = await axios.get(`/${API_URL}/page?num=${page}&limit=${limit}`);
+  const response = await axios.get(`/${API_URL}/?page=${page}&limit=${limit}`);
   return response.data
 }
 
@@ -41,8 +41,6 @@ const searchPosts = async (data) => {
   } else {
     response = await axios.post(`/${API_URL}/${searchingMethod}`, { term: searchingTerm })
   }
-  
-  console.log(response)
   return response.data
 }
 

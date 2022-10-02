@@ -2,9 +2,10 @@ const Post = require('../models/Post')
 const asyncHandler = require('express-async-handler')
 
 const getAllPosts = asyncHandler(async (req, res) => {
-  const { num, limit } = req.query
+  
+  const { page, limit } = req.query
   const pageOptions = {
-    page: Number(num),
+    page: Number(page),
     limit: Number(limit)
   }
   
@@ -17,7 +18,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
   res.status(200).json({
     posts,
     totalPages: Math.ceil(count/limit),
-    currentPage: num
+    currentPage: page
   })
 })
 
@@ -44,14 +45,14 @@ const getSearchPosts = asyncHandler(async (req, res) => {
 
 const getPost = asyncHandler(async (req, res) => {
   const postID = req.params.id
-
+  
   const post = await Post.findById(postID)
   
   if(!post) {
     res.status(400)
     throw new Error(`Post with ID: ${postID} not found!`)
   }
-
+  
   res.status(200).json(post)
 })
 
